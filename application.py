@@ -4,6 +4,7 @@ from Tkinter import *
 from Utility import *
 import serial
 import sys
+import time
 
 parser = argparse.ArgumentParser(description='establish serial communication with Serial port based on platform and port no.')
 parser.add_argument('platform', help="w -> windows | u-> unix | uw -> bash on windows (build 16299 and later)")
@@ -37,14 +38,23 @@ def fire(serial, message, box):
         add_text( "\nIGNITER: could not read line", box)
     return
 
-def stop(serial,message, box):
+def stop(serial,message1, message2, box):
     add_text("\nSTOPPING!",box)
-    serial.write(message)
+    serial.write(message1)
     add_text("\nwaiting for confirmation",box)
     try:
         add_text("\n IGNITER: %s" % serial.readline(), box)
     except Exception as e:
         add_text( "\nIGNITER: could not read line", box)
+    time.sleep(0.05)
+    add_text("\nCLOSING!", box)
+    serial.write(message2)
+    add_text("\nwaiting for confirmation",box)
+    try:
+        add_text("\n IGNITER: %s" % serial.readline(), box)
+    except Exception as e:
+        add_text( "\nIGNITER: could not read line", box)
+
     return
 
 def main(argv):
@@ -58,6 +68,7 @@ def main(argv):
         print("port error")
 
     root = Tk()
+    root.title("UIgnite")
     frame = Frame(root)
     frame.pack()
     topframe = Frame(root)
@@ -70,7 +81,7 @@ def main(argv):
     text.pack()
 
 
-    redbutton = Button(topframe, text="STOP", fg="red",command=lambda:stop(ser,"1",text))
+    redbutton = Button(topframe, text="STOP", fg="red",command=lambda:stop(ser,"1","5",text))
     redbutton.pack( side = LEFT)
     greenbutton = Button(topframe, text="START", fg="green", command=lambda: fire(ser,"2",text))
     greenbutton.pack( side = LEFT )
