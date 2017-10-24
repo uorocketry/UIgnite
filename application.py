@@ -51,6 +51,7 @@ def stop(serial,message1, message2, box):
     serial.write(message2)
     add_text("\nwaiting for confirmation",box)
     try:
+
         add_text("\n IGNITER: %s" % serial.readline(), box)
     except Exception as e:
         add_text( "\nIGNITER: could not read line", box)
@@ -60,7 +61,7 @@ def stop(serial,message1, message2, box):
 def main(argv):
     print (argv)
     temp = (configure_usb(argv[0], argv[1]))
-    ser = serial.Serial(temp)
+    ser = serial.Serial(temp,timeout=2)
     try:
         ser.close()
         ser.open()
