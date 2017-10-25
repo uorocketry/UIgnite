@@ -19,6 +19,7 @@ def add_text(words, box):
 
 def ping(serial,message, box):
     add_text("\nPinging Igniter", box)
+    serial.flushInput()
     serial.write(message)
     add_text("\nwaiting for reply", box)
     try:
