@@ -2,7 +2,7 @@
 
  A basic UI made with Tkinter in python 2.7 for controlling engine ignition tests via XBee radios.  
  Built to work with Arduino-Iginiton.
-
+![screen shot 2017-10-25 at 10 24 07 am](https://user-images.githubusercontent.com/20449016/32208520-664bc2a6-bdd9-11e7-882c-718dc20fb6dc.png)
 ## Running
 To run, make sure your system satisfies requirements.txt and that you are running python 2.7
 
