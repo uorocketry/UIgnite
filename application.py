@@ -1,10 +1,10 @@
-#!/usr/bin/python
 import argparse
 from Tkinter import *
 from Utility import *
 import serial
 import sys
 import time
+import json
 
 parser = argparse.ArgumentParser(description='establish serial communication with Serial port based on platform and port no.')
 parser.add_argument('platform', help="w -> windows | u-> unix | uw -> bash on windows (build 16299 and later)")
@@ -12,6 +12,10 @@ parser.add_argument('port_number', help="if using unix, it is X in ttyUSBX | if 
 args = parser.parse_args()
 
 
+fire_message = json.dumps({ 'action': 'test_ejection_stage_one', 'data': 'data' })
+fire_2_message = json.dumps({ 'action': 'test_ejection_stage_two', 'data': 'data' })
+ping_message = json.dumps({ 'action': 'ping', 'data': 'data' })
+stop_message = json.dumps({ 'action': 'stop', 'data': 'data' })
 
 def add_text(words, box):
     box.insert(CURRENT, words)
@@ -23,7 +27,7 @@ def ping(serial,message, box):
     serial.write(message)
     add_text("\nwaiting for reply", box)
     try:
-        serial.readline()
+        #serial.readline()
         add_text("\n IGNITER: %s" % serial.readline(), box)
     except Exception as e:
         add_text( "\nIGNITER: could not read line", box)
@@ -83,11 +87,11 @@ def main(argv):
     text.pack()
 
 
-    redbutton = Button(topframe, text="STOP", fg="red",command=lambda:stop(ser,"1","5",text))
+    redbutton = Button(topframe, text="Fire Small", fg="red",command=lambda:stop(ser,fire_2_message,text))
     redbutton.pack( side = LEFT)
-    greenbutton = Button(topframe, text="START", fg="green", command=lambda: fire(ser,"2",text))
+    greenbutton = Button(topframe, text="Fire Main", fg="green", command=lambda: fire(ser,fire_message,text))
     greenbutton.pack( side = LEFT )
-    bluebutton = Button(topframe, text="PING", fg="blue", command=lambda: ping(ser,"6",text))
+    bluebutton = Button(topframe, text="PING", fg="blue", command=lambda: ping(ser,ping_message,text))
     bluebutton.pack( side = RIGHT )
 
 
